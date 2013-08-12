@@ -1,0 +1,35 @@
+<h3>All your accounts</h3>
+
+<% if !@identities.blank? %>
+  <% for identity in @identities %>
+    <li>
+      <%= identity.to_json %>
+    </li>
+  <% end %>
+<% else %>
+  No Accounts yet
+<% end %>
+
+Connect your Accounts
+
+<br>
+
+<h4>Published Albums</h4>
+
+<% if !@public_albums.blank? %>
+  <% for album in @public_albums %>
+    <%= render "gallery/albums/admin_album_element", album: album %>
+  <% end %>
+<% else %>
+    <p>You have no published albums</p>
+<% end %>
+
+<h4>Published Albums</h4>
+
+<% if !@private_albums.blank? %>
+  <% for album in @private_albums %>
+    <%= render "gallery/albums/admin_album_element", album: album %>
+  <% end %>
+<% else %>
+  <p>You have no private albums</p>
+<% end %>

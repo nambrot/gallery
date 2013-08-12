@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  album_id: 1
+  images: MyText
+  source: MyString
+  name: MyString
+  url: MyString
+  uid: MyString
+  provider: MyString
+  aspect_ratio: 1.5
+
+two:
+  album_id: 1
+  images: MyText
+  source: MyString
+  name: MyString
+  url: MyString
+  uid: MyString
+  provider: MyString
+  aspect_ratio: 1.5

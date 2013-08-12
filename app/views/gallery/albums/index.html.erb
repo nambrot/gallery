@@ -1,0 +1,7 @@
+<% if !@albums.blank? %>
+  <% for album in @albums %>
+    <%= render "album_element", album: album %>
+  <% end %>
+<% else %>
+  
+<% end %>

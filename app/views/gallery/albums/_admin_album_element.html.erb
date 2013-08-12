@@ -1,0 +1,11 @@
+<div class="gallery-album-admin">
+  <img src="<%= album.cover_photo.try(:thumbnail) %>" alt="">
+  <h3><%= album.name %></h3>
+  <p>
+    <%= link_to (album.public ? "Make Album private" : "Make Album public"), (album.public ? admin_album_private_path(album) : admin_album_public_path(album)), :method => :post %>
+    
+    <br>
+     <%= link_to "Go to Album", admin_album_path(album)  %>
+  </p>
+  
+</div>

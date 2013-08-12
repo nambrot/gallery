@@ -1,0 +1,15 @@
+<div class="gallery-album">
+  <h3><%= album.name %></h3>
+  <div class="gallery-album-photos">
+    <div class="gallery-album-photos-canvas" tabindex="0">
+      <% if !album.photos.blank? %>
+        <% for photo in album.photos %>
+          <img data-src="<%= photo.thumbnail %>" data-big-src="<%= photo.source %>" loaded=false class='' alt="">
+        <% end %>
+      <% else %>
+        
+      <% end %>
+    </div>
+    
+  </div>
+</div>
