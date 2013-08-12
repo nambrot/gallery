@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = Gallery::VERSION
   s.authors     = ["Nam Chu Hoai"]
   s.email       = ["nambrot@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Gallery."
-  s.description = "TODO: Description of Gallery."
+  s.homepage    = "https://www.github.com/nambrot/gallery"
+  s.summary     = "An easy gem to include a gallery to your site"
+  s.description = "An easy gem to include a gallery to your site"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
