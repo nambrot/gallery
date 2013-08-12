@@ -48,7 +48,7 @@ module Gallery
         raw_photos = album_response['feed']['entry']
         
         Album.transaction do
-          processed_photos = raw_photos.map { |photo| photos.create :uid => photo['gphoto$id']['$t'], :provider => :google, :thumbnail => photo['content']['src'].gsub(/\/[^\/]*\z/, '/w512-h512-no\\0'), :url => photo['link'][1]['href'], :name => photo['title']['$t'], :source => photo['content']['src'].gsub(/\/[^\/]*\z/, '/w2048-h2048-no\\0'), :aspect_ratio => photo['gphoto$width']['$t'].to_f/photo['gphoto$height']['$t'].to_f}
+          processed_photos = raw_photos.map { |photo| photos.create :uid => photo['gphoto$id']['$t'], :provider => :google, :thumbnail => photo['content']['src'].gsub(/\/[^\/]*\z/, '/w512-h512-no/photo'), :url => photo['link'][1]['href'], :name => photo['title']['$t'], :source => photo['content']['src'].gsub(/\/[^\/]*\z/, '/w2048-h2048-no/photo'), :aspect_ratio => photo['gphoto$width']['$t'].to_f/photo['gphoto$height']['$t'].to_f}
           
           # only fetch more if all photos were successfully created and we have equal total to per page
           # TODO: actually do this, google right now returns 1000, plenty
