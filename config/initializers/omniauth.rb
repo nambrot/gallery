@@ -1,7 +1,8 @@
 configpath = Rails.root.join('config', 'gallery_api_keys.yml')
 providers = {}
 if File.exists?(configpath)
-  providers = YAML.load_file(configpath)
+  
+  providers = YAML.load(ERB.new(File.new(configpath).read).result)
 end
 
 
