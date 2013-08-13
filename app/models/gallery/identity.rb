@@ -12,7 +12,19 @@ module Gallery
         album.fetch_photos
       
       when 'google'
-        client = OAuth2::Client.new('1040704984149.apps.googleusercontent.com', 'RHObwIrckTzGtwLA6aRY-vLB', :site => 'https://picasaweb.google.com/data/')
+
+        # Load api keys
+
+        configpath = Rails.root.join('config', 'gallery_api_keys.yml')
+        providers = {}
+        if File.exists?(configpath)
+          
+          providers = YAML.load(ERB.new(File.new(configpath).read).result)
+        end
+
+        return unless providers["google_oauth2"]
+
+        client = OAuth2::Client.new(providers["google_oauth2"][0], providers["google_oauth2"][1], :site => 'https://picasaweb.google.com/data/')
         access_token = OAuth2::AccessToken.new(client, self.token, :site => 'https://picasaweb.google.com/')
         album_response = JSON.parse(access_token.get('/data/feed/api/user/default?alt=json').body)
         # albums

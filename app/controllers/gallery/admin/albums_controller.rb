@@ -17,5 +17,10 @@ module Gallery
       redirect_to :back, :notice => "Album #{album.name} set private"
     end
 
+    def fetch_photos
+      album = Album.find(params[:album_id])
+      album.fetch_photos
+      redirect_to :back, :notice => "Photos fetched"
+    end
   end
 end

@@ -6,6 +6,8 @@ module Gallery
       @identities = Identity.all
       @public_albums = Album.published
       @private_albums = Album.private
+      configpath = Rails.root.join('config', 'gallery_api_keys.yml')
+      @providers = YAML.load(ERB.new(File.new(configpath).read).result).keys
     end
   end
 end

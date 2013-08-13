@@ -27,6 +27,10 @@ Gem::Specification.new do |s|
 end
 
 
+# TODO:
+# figure out tokens
+# implement facebook
+
 # config options
 # run in process or background job
 # path at which is mounted (for omniauth)

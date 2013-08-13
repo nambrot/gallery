@@ -3,6 +3,7 @@ Gallery::Engine.routes.draw do
     resources :albums do
       post 'public' => "albums#set_public"
       post 'private' => "albums#set_private"
+      post 'fetch_photos' => "albums#fetch_photos"
       resources :photos do
 
       end

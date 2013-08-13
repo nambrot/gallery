@@ -1,18 +1,28 @@
-<h3>All your accounts</h3>
+
 
 <% if !@identities.blank? %>
+<h3>All your accounts</h3>
   <% for identity in @identities %>
     <li>
-      <%= identity.to_json %>
+      <%= link_to identity.name, identity.link %>
     </li>
   <% end %>
 <% else %>
-  No Accounts yet
+    <h3>No Accounts connected</h3>
 <% end %>
 
-Connect your Accounts
+<% if !@providers.blank? %>
+  <h3>Connect other accounts</h3>
+  <p>
+    I haven't really figured out how to get omniauth routes mounted inside an engine, so for now, you got to initiate the oauth process manually. Below you will see a list of providers currently initialized from your config/gallery_api_keys.yml. Visit "/#{mount_point}/auth/#{provider_name}". It should then show up here.
+  </p>
+  <% for provider in @providers %>
+    <li><%= provider %></li>
+  <% end %>
+<% else %>
+  
+<% end %>
 
-<br>
 
 <h4>Published Albums</h4>
 

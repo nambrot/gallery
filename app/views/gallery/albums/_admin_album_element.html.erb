@@ -5,6 +5,8 @@
     <%= link_to (album.public ? "Make Album private" : "Make Album public"), (album.public ? admin_album_private_path(album) : admin_album_public_path(album)), :method => :post %>
     
     <br>
+    <%= link_to "Fetch Photos", admin_album_fetch_photos_path(album), :method => :post  %>
+    <br>
      <%= link_to "Go to Album", admin_album_path(album)  %>
   </p>
   
