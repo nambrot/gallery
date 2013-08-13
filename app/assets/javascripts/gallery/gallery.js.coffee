@@ -164,6 +164,7 @@ $.fn.extend
 
       # TODO: set prefix in a config
       $.get "/gallery/albums/#{$(this).data('gallery-id')}/photos", (resp) =>
+        return if resp.length == 0
         replacement = $("<div class='gallery-album'><div class='gallery-album-photos small'><div class='gallery-album-photos-canvas'></div></div></div>")
         replacement.find('.gallery-album-photos').css 'height', height
         canvas = replacement.find ".gallery-album-photos-canvas"
