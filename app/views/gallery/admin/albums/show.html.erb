@@ -1,0 +1,14 @@
+<h3><%= @album.name %></h3>
+  <p>
+    ID: <%= @album.id %> <br>
+    UID: <%= @album.uid %> <br>
+    Provider: <%= @album.provider %>
+  </p>
+  
+<% if !@album.photos.blank? %>
+  <% for photo in @album.photos %>
+    <img src="<%= photo.thumbnail %>" alt=" ">
+  <% end %>
+<% else %>
+  
+<% end %> 
