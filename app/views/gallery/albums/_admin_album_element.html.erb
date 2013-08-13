@@ -2,6 +2,11 @@
   <img src="<%= album.cover_photo.try(:thumbnail) %>" alt="">
   <h3><%= album.name %></h3>
   <p>
+    ID: <%= album.id %> <br>
+    UID: <%= album.uid %> <br>
+    Provider: <%= album.provider %>
+  </p>
+  <p>
     <%= link_to (album.public ? "Make Album private" : "Make Album public"), (album.public ? admin_album_private_path(album) : admin_album_public_path(album)), :method => :post %>
     
     <br>

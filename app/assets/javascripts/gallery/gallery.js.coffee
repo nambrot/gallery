@@ -13,6 +13,7 @@ $.fn.extend
 
     # _Insert magic here._
     return @each ()->
+
       $.extend this,
         lastLoadedPhotoIndex: 0
         currentPhoto: 0
@@ -34,7 +35,8 @@ $.fn.extend
           @gallery.on 'click', '.gallery-fullscreen',  $.proxy(@requestFullScreen, this)
           @gallery.on 'webkitfullscreenchange mozfullscreenchange fullscreenchange', =>
             @gallery.toggleClass 'fullscreen'
-
+            if !@gallery.hasClass 'fullscreen'
+              @gallery.height @pre_fullscreen_height
           # keys
 
           @canvas.keydown (e) =>
@@ -65,7 +67,7 @@ $.fn.extend
           for image in images
             if fullscreenEnabled then image.src = $(image).data('big-src') else image.src = $(image).data('src')
 
-        next: ->
+        next: (evt) ->
           # get current photo position
           scrollLeft = @canvas.scrollLeft()
 
@@ -73,13 +75,17 @@ $.fn.extend
             @goToImage(1)
             return
 
+          evt.stopPropagation() if evt.stopPropagation?
+          
           index = 0
           for child, index in @canvas.children()
             if child.offsetLeft > scrollLeft
               @goToImage(index)
               break
 
-        previous: ->
+          
+
+        previous: (evt) ->
           scrollLeft = @canvas.scrollLeft()
           
           if scrollLeft == 0
@@ -92,6 +98,7 @@ $.fn.extend
               @goToImage(index-1)
               break
 
+          evt.stopPropagation() if evt.stopPropagation?
 
         requestFullScreen: ->
 
@@ -106,7 +113,12 @@ $.fn.extend
             else if document.webkitCancelFullScreen
               document.webkitCancelFullScreen()
 
+            @gallery.height @pre_fullscreen_height
+
           else
+
+            # save height
+            @pre_fullscreen_height = @gallery.height()
 
             if @gallery[0].requestFullScreen
               @gallery[0].requestFullScreen()
@@ -114,6 +126,8 @@ $.fn.extend
               @gallery[0].mozRequestFullScreen()
             else if @gallery[0].webkitRequestFullScreen
               @gallery[0].webkitRequestFullScreen()
+
+            @gallery.height "100%"
 
             # convert all the images to their big-src
             images = @canvas.find('img.loaded')
@@ -133,3 +147,28 @@ $.fn.extend
 
       this.init()
       return this
+  decorate_gallery: (options) ->
+    
+    settings =
+      foo: 'bar'
+
+    # Merge default settings with options.
+    settings = $.extend settings, options
+
+    # _Insert magic here._
+    return @each ()->
+
+    # for personal use, record height
+      
+      height = $(this).height()
+
+      # TODO: set prefix in a config
+      $.get "/gallery/albums/#{$(this).data('gallery-id')}/photos", (resp) =>
+        replacement = $("<div class='gallery-album'><div class='gallery-album-photos small'><div class='gallery-album-photos-canvas'></div></div></div>")
+        replacement.find('.gallery-album-photos').css 'height', height
+        canvas = replacement.find ".gallery-album-photos-canvas"
+        for image in resp
+          canvas.append "<img src='' alt='' data-src='#{image.thumbnail}' data-big-src='#{image.source}' loaded=false>"
+        $(this).replaceWith replacement
+        # set new element as new context
+        replacement.gallery()

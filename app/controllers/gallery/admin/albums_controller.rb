@@ -22,5 +22,10 @@ module Gallery
       album.fetch_photos
       redirect_to :back, :notice => "Photos fetched"
     end
+
+    def show
+      @album = Album.find(params[:id])
+    end
+
   end
 end
