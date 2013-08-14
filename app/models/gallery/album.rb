@@ -7,6 +7,7 @@ module Gallery
 
     scope :published, -> { where(public: true) }
     scope :private, -> {where(public: false)}
+    default_scope order('updated_at DESC')
 
     def fetch_photos
       case provider.to_s

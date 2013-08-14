@@ -5,6 +5,11 @@ module Gallery
 
     before_filter :login_required
 
+    def fetch_albums
+      Identity.all.each(&:fetch_albums)
+      redirect_to :back, :notice => "Albums fetched"
+    end
+
     def set_public
       album = Album.find(params[:album_id])
       album.update_attributes(:public => true)

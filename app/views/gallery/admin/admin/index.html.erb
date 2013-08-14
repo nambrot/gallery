@@ -7,6 +7,7 @@
       <%= link_to identity.name, identity.link %>
     </li>
   <% end %>
+  <%= link_to "Fetch Albums", admin_fetch_albums_path, :method => :post  %>
 <% else %>
     <h3>No Accounts connected</h3>
 <% end %>
