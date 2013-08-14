@@ -1,6 +1,7 @@
 # = require jquery
 # = require jquery_ujs
 # = require gallery/images_loaded
+# = require gallery/spinner
 
 $.fn.extend
   gallery: (options) ->
@@ -15,7 +16,6 @@ $.fn.extend
     return @each ()->
 
       $.extend this,
-        lastLoadedPhotoIndex: 0
         currentPhoto: 0
         loading: false
         gallery: $(this).find('.gallery-album-photos')
@@ -37,7 +37,8 @@ $.fn.extend
             @gallery.toggleClass 'fullscreen'
             if !@gallery.hasClass 'fullscreen'
               @gallery.height @pre_fullscreen_height
-          # keys
+              @canvas.find('img').width 300
+              @canvas.find('img').width 'auto'
 
           @canvas.keydown (e) =>
             switch e.which
@@ -46,20 +47,53 @@ $.fn.extend
             e.preventDefault()
           # load more on scroll
           @canvas.scroll () =>
-            if @canvas[0].offsetWidth * @canvas.scrollLeft() * 100 / @canvas[0].scrollWidth > 90
+            scrollLeft = @canvas.scrollLeft()
+
+            if scrollLeft == 0
+              @currentPhoto = 0
+            else
+              for child, index in @canvas.children()
+                if child.offsetLeft > scrollLeft
+                  @currentPhoto = index-1
+                  break
+            if (@canvas[0].offsetWidth + scrollLeft) * 100 / @canvas[0].scrollWidth > 70
               @loadNextPhotos()
 
-
-
         loadNextPhotos: (count = 4) ->
-          if @loading
+          if @loading or $(this).find('img[loaded=false]').length == 0
             return
           @loading = true
+
+          # show spinner
+          @spinner_container = $('<div class="gallery-spinner"></div>')
+          @spinner_container.width (if $(this).find('img[loaded=true]').length == 0 then '100%' else '5%')
+          @gallery.append @spinner_container
+          
+          opts = 
+            lines: 10
+            length: 5
+            width: 3
+            radius: 6
+            corners: 1
+            rotate: 0
+            direction: 1
+            color: '#000'
+            speed: 1
+            trail: 60
+            shadow: false
+            hwaccel: false
+            class: 'spinner'
+            zIndex: 2e9
+
+          @spinner = new Spinner(opts).spin(@spinner_container[0]);
+
           images = $(this).find('img[loaded=false]').slice(0, count)
           $(images).imagesLoaded =>
             setTimeout ( =>
               $(images).attr('loaded', true).addClass 'loaded'
               @loading = false
+              @spinner.stop()
+              @spinner_container.remove()
              ), 20
           
           fullscreenEnabled = @gallery.hasClass 'fullscreen'
@@ -82,8 +116,6 @@ $.fn.extend
             if child.offsetLeft > scrollLeft
               @goToImage(index)
               break
-
-          
 
         previous: (evt) ->
           scrollLeft = @canvas.scrollLeft()
@@ -115,6 +147,10 @@ $.fn.extend
 
             @gallery.height @pre_fullscreen_height
 
+            # weird bug requires us to set width to auto or something
+            @canvas.find('img').width 300
+            @canvas.find('img').width 'auto'
+            
           else
 
             # save height
@@ -133,17 +169,18 @@ $.fn.extend
             images = @canvas.find('img.loaded')
             for image in images
               if image.src != $(image).data('big-src')
-                loading_image = new Image()
-                $(loading_image).imagesLoaded =>
-                  image.src = loading_image.src
-                loading_image.src = $(image).data 'big-src'
+                do (image) ->
+                  loading_image = new Image()
+                  $(loading_image).load =>
+                    image.src = loading_image.src
+                  loading_image.src = $(image).data 'big-src'
 
           setTimeout ( => 
             @goToImage(@currentPhoto)), 400
 
         goToImage: (index) ->
           @currentPhoto = index
-          @canvas.animate({scrollLeft: @canvas.children()[index].offsetLeft}, 400)
+          @canvas.animate({scrollLeft: @canvas.children()[index].offsetLeft}, 300)
 
       this.init()
       return this

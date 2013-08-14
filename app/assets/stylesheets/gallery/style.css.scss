@@ -76,7 +76,7 @@
     width: 40px;
     height: 40px;
     top: 45%;
-
+    z-index: 10;
     &:after, &:before {
       background: rgba(255,255,255,0.3);
       -moz-border-radius: 0.2em;
@@ -146,6 +146,14 @@
     top: 0px;
     box-shadow: inset 2px 2px 10px #aaa, inset -2px -2px 10px #aaa;
   }
+
+  .gallery-spinner {
+    position: absolute;
+    height: 100%;
+    background-color: rgba(255,255,255,0.9);
+    top: 0px;
+    right: 0px;
+  }
 }
 
 .gallery-album-photos-canvas {
@@ -161,7 +169,8 @@
     display: inline-block;
     height: 96.5%;
     margin-top: 0.675%;
-
+    
+    max-width: 1000000px;
     vertical-align: top;
     border-radius: 12px;
     opacity: 0;
