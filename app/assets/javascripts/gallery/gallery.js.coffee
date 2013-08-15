@@ -48,7 +48,6 @@ $.fn.extend
           # load more on scroll
           @canvas.scroll () =>
             scrollLeft = @canvas.scrollLeft()
-
             if scrollLeft == 0
               @currentPhoto = 0
             else
@@ -60,13 +59,13 @@ $.fn.extend
               @loadNextPhotos()
 
         loadNextPhotos: (count = 4) ->
-          if @loading or $(this).find('img[loaded=false]').length == 0
+          if @loading or @gallery.find('img[loaded=false]').length == 0
             return
           @loading = true
 
           # show spinner
           @spinner_container = $('<div class="gallery-spinner"></div>')
-          @spinner_container.width (if $(this).find('img[loaded=true]').length == 0 then '100%' else '5%')
+          @spinner_container.width (if @gallery.find('img[loaded=true]').length == 0 then '100%' else '5%')
           @gallery.append @spinner_container
           
           opts = 
@@ -87,7 +86,7 @@ $.fn.extend
 
           @spinner = new Spinner(opts).spin(@spinner_container[0]);
 
-          images = $(this).find('img[loaded=false]').slice(0, count)
+          images = @gallery.find('img[loaded=false]').slice(0, count)
           $(images).imagesLoaded =>
             setTimeout ( =>
               $(images).attr('loaded', true).addClass 'loaded'
@@ -144,6 +143,7 @@ $.fn.extend
               document.mozCancelFullScreen()
             else if document.webkitCancelFullScreen
               document.webkitCancelFullScreen()
+            else @cancelFallbackFullscreen()
 
             @gallery.height @pre_fullscreen_height
 
@@ -162,6 +162,8 @@ $.fn.extend
               @gallery[0].mozRequestFullScreen()
             else if @gallery[0].webkitRequestFullScreen
               @gallery[0].webkitRequestFullScreen()
+            else @requestFallbackFullscreen()
+
 
             @gallery.height "100%"
 
@@ -178,6 +180,21 @@ $.fn.extend
           setTimeout ( => 
             @goToImage(@currentPhoto)), 400
 
+        requestFallbackFullscreen: ->
+          @parent = @gallery.parent()
+          fullscreen = $ '<div id="gallery-fallback-fullscreen"></div>'
+          $('body').append fullscreen
+          @gallery.detach()
+          fullscreen.append @gallery
+          @canvas = @gallery.find('.gallery-album-photos-canvas')
+          @gallery.addClass 'fullscreen'
+
+        cancelFallbackFullscreen: ->
+          @gallery.detach()
+          $('#gallery-fallback-fullscreen').remove()
+          @parent.append @gallery
+          @canvas.find('.gallery-album-photos-canvas')
+          @gallery.removeClass 'fullscreen'
         goToImage: (index) ->
           @currentPhoto = index
           @canvas.animate({scrollLeft: @canvas.children()[index].offsetLeft}, 300)
