@@ -9,7 +9,10 @@ module Gallery
       album = Album.find_by_uid_and_provider(params[:album_id].split('-').first, params[:album_id].split('-').last) unless album
       photos = album.photos
       if album.public
-        respond_with photos, :only => [:id, :album_id, :source, :name, :aspect_ratio, :thumbnail]
+        if stale? photos
+          respond_with photos, :only => [:id, :album_id, :source, :name, :aspect_ratio, :thumbnail]
+        end
+
       else
         respond_with []
       end
