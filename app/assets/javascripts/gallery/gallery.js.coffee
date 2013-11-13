@@ -55,8 +55,8 @@ $.fn.extend
                 if child.offsetLeft > scrollLeft
                   @currentPhoto = index-1
                   break
-            if (@canvas[0].offsetWidth + scrollLeft) * 100 / @canvas[0].scrollWidth > 70
-              @loadNextPhotos()
+            if (@canvas[0].offsetWidth + scrollLeft) * 100 / @canvas[0].scrollWidth > 60
+              @loadNextPhotos(2)
 
         loadNextPhotos: (count = 4) ->
           if @loading or @gallery.find('img[loaded=false]').length == 0
