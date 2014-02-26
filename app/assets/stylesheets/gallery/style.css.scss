@@ -54,7 +54,8 @@
     right: 10px;
     border-radius: 5px;
     background-color: rgba(255,255,255,0.5);
-
+    box-shadow: 1px 1px 12px 3px;
+    
     &:hover {
       @include transform(scale(1.2));
       cursor: pointer;
@@ -167,7 +168,7 @@
   img {
     @include transition(all 1s ease-in-out);
     display: inline-block;
-    height: 92.5%;
+    height: 95%;
     margin-top: 0.675%;
     
     max-width: 1000000px;
@@ -190,4 +191,8 @@
   top: 0px;
   left: 0px;
   z-index: 10;
+}
+
+.gallery-album-photos.fullscreen .gallery-album-photos-canvas img {
+  height: 98%;
 }

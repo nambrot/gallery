@@ -40,11 +40,6 @@ $.fn.extend
               @canvas.find('img').width 300
               @canvas.find('img').width 'auto'
 
-          @canvas.keydown (e) =>
-            switch e.which
-              when 37 then @previous()
-              when 39 then @next()
-            e.preventDefault()
           # load more on scroll
           @canvas.scroll () =>
             scrollLeft = @canvas.scrollLeft()
@@ -151,6 +146,7 @@ $.fn.extend
             @canvas.find('img').width 300
             @canvas.find('img').width 'auto'
             
+            $('body').off "keydown.gallery_fullscreen"
           else
 
             # save height
@@ -166,6 +162,11 @@ $.fn.extend
 
 
             @gallery.height "100%"
+            $('body').on "keydown.gallery_fullscreen", (e) =>
+              switch e.which
+                when 37 then @previous(e)
+                when 39 then @next(e)
+              e.preventDefault()
 
             # convert all the images to their big-src
             images = @canvas.find('img.loaded')
