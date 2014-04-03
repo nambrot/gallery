@@ -33,7 +33,7 @@ $.fn.extend
           # set up full screen
           @gallery.append('<span class="gallery-fullscreen"></span>')
           @gallery.on 'click', '.gallery-fullscreen',  $.proxy(@requestFullScreen, this)
-          @gallery.on 'webkitfullscreenchange mozfullscreenchange fullscreenchange', =>
+          $(document).on 'webkitfullscreenchange mozfullscreenchange fullscreenchange', =>
             @gallery.toggleClass 'fullscreen'
             if !@gallery.hasClass 'fullscreen'
               @gallery.height @pre_fullscreen_height
@@ -127,11 +127,9 @@ $.fn.extend
           evt.stopPropagation() if evt.stopPropagation?
 
         requestFullScreen: ->
-
           fullscreenEnabled = @gallery.hasClass 'fullscreen'
 
           if fullscreenEnabled
-          
             if document.cancelFullScreen
               document.cancelFullScreen()
             else if document.mozCancelFullScreen
